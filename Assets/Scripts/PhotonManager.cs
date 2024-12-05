@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PhotonManager : MonoBehaviourPunCallbacks
@@ -12,13 +13,39 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     [SerializeField] private ListItem _itemPrefab;
     [SerializeField] private Transform _content;
 
+    [SerializeField] private string _nickName;
+
+    private List<RoomInfo> _allRoomsInfo = new List<RoomInfo>();
+
+    private GameObject _player;
+    [SerializeField] private GameObject _playerPref;
+
+
     private void Start()
     {
-        if (!PhotonNetwork.IsConnected)
+
+        PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.ConnectToRegion(_region);
+
+        if (SceneManager.GetActiveScene().name == "game_scene")
         {
-            PhotonNetwork.ConnectUsingSettings();
-            PhotonNetwork.ConnectToRegion(_region);
-        } 
+            _player = PhotonNetwork.Instantiate(_playerPref.name, Vector3.zero, Quaternion.identity);
+            Debug.LogError(1);
+        }
+
+    }
+
+    public override void OnConnectedToMaster()
+    {
+
+        Debug.Log("Вы подключились к: " + PhotonNetwork.CloudRegion);
+        if (!string.IsNullOrEmpty(_nickName))
+            PhotonNetwork.NickName = _nickName;
+        else
+            PhotonNetwork.NickName = "User";
+
+        if (!PhotonNetwork.InLobby)
+            PhotonNetwork.JoinLobby();
     }
 
     public void CreateRoomButton()
@@ -30,8 +57,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = 2;
-        PhotonNetwork.CreateRoom(_roomName.text, roomOptions,TypedLobby.Default);
-        PhotonNetwork.LoadLevel("game_scene");
+        PhotonNetwork.CreateRoom(_roomName.text, roomOptions, TypedLobby.Default);
     }
 
     public override void OnCreatedRoom()
@@ -44,13 +70,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         Debug.Log("Не удалось создать комнату!");
     }
 
-    public override void OnConnectedToMaster()
-    {
-        Debug.Log("Вы подключились к: " + PhotonNetwork.CloudRegion);
 
-        if(!PhotonNetwork.InLobby)
-            PhotonNetwork.JoinLobby();
-    }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
@@ -61,9 +81,19 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     {
         foreach (RoomInfo info in roomList)
         {
+            foreach (var addInfo in _allRoomsInfo)
+            {
+                if (addInfo.masterClientId == info.masterClientId)
+                    return;
+            }
             ListItem listItem = Instantiate(_itemPrefab, _content);
+
             if (listItem != null)
+            {
                 listItem.SetInfo(info);
+                _allRoomsInfo.Add(info);
+            }
+
         }
     }
 
@@ -83,12 +113,13 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     }
 
     public void LeaveButton()
-    {       
+    {
         PhotonNetwork.LeaveRoom();
     }
 
     public override void OnLeftRoom()
     {
+        PhotonNetwork.Destroy(_player.gameObject);
         PhotonNetwork.LoadLevel("main");
     }
 }
