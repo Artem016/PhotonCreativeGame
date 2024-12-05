@@ -18,7 +18,6 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && _photonView.IsMine)
         {
-            Debug.LogError(0);
             _animator.SetTrigger("ChangeColor");
         }
     }

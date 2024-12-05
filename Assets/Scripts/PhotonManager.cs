@@ -30,7 +30,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         if (SceneManager.GetActiveScene().name == "game_scene")
         {
             _player = PhotonNetwork.Instantiate(_playerPref.name, Vector3.zero, Quaternion.identity);
-            Debug.LogError(1);
         }
 
     }
