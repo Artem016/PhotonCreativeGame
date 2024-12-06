@@ -37,6 +37,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         Debug.Log("We are connected and in room");
 
-        GameObject playerLocal = PhotonNetwork.Instantiate(player.name, spawnPoint.position, Quaternion.identity);
+        GameObject player = PhotonNetwork.Instantiate(this.player.name, spawnPoint.position, Quaternion.identity);
+        player.GetComponent<PlayerSetup>().IsLocalPlayer();    
     }
 }
