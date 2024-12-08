@@ -1,11 +1,12 @@
 using Photon.Pun;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
     public GameObject player;
     [Space]
-    public Transform spawnPoint;
+    public List<Transform> spawnPoints;
 
     [Space]
     public GameObject roomCam;
@@ -62,9 +63,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         roomCam.SetActive(false);
 
-        GameObject player = PhotonNetwork.Instantiate(this.player.name, spawnPoint.position, Quaternion.identity);
+        GameObject player = PhotonNetwork.Instantiate(this.player.name, spawnPoints[Random.Range(0, spawnPoints.Count - 1)].position, Quaternion.identity);
         player.GetComponent<PlayerSetup>().IsLocalPlayer();
 
-        player.GetComponent<PhotonView>().RPC("SetNickName", RpcTarget.All, _nickName);
+        player.GetComponent<PhotonView>().RPC("SetNickName", RpcTarget.AllBuffered, _nickName);
     }
 }

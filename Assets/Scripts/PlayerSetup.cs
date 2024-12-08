@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using TMPro;
 using UnityEngine;
 
 public class PlayerSetup : MonoBehaviour
@@ -9,6 +10,8 @@ public class PlayerSetup : MonoBehaviour
     public GameObject camera;
 
     public string nickName;
+
+    public TextMeshPro nickNameText;
 
     public void IsLocalPlayer()
     {
@@ -20,5 +23,7 @@ public class PlayerSetup : MonoBehaviour
     public void SetNickName(string nickName)
     {
         this.nickName = nickName;
+
+        nickNameText.text = nickName;
     }
 }
