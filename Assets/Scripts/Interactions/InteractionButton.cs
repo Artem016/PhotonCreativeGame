@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractionButton : MonoBehaviour, IInteraction
+public class InteractionButton : MonoBehaviour, IInteractable
 {
     public string GetInteractText()
     {

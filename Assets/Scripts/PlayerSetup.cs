@@ -6,16 +6,25 @@ using UnityEngine;
 
 public class PlayerSetup : MonoBehaviour
 {
-    public Movement movement;
-    public GameObject camera;
+    private PlayerInteract _playerInteract;
+    private Movement _movement;
 
-    public string nickName;
+    private string nickName;
+
+    public GameObject camera;
 
     public TextMeshPro nickNameText;
 
+    private void Awake()
+    {
+        _movement = GetComponent<Movement>();
+        _playerInteract = GetComponent<PlayerInteract>();
+    }
+
     public void IsLocalPlayer()
     {
-        movement.enabled = true;
+        _movement.enabled = true;
+        _playerInteract.enabled = true;
         camera.SetActive(true);
     }
 

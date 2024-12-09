@@ -525,6 +525,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movement: {fileID: 191669402522484569}
   camera: {fileID: 281027643150345617}
+  playerInteract: {fileID: -1999764055380229372}
   nickName: 
   nickNameText: {fileID: 527445538508320966}
 --- !u!135 &3097904930917455541
@@ -555,7 +556,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6810167465267558292}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a118a4cc559bbad4c80e54fd270eeedd, type: 3}
   m_Name: 

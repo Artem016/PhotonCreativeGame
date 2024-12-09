@@ -15,6 +15,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public GameObject nameUI;
     public GameObject connectingUI;
 
+    [SerializeField] private PlayerInteractUI _playerInteractUI;
+
     private string _nickName = "unnamed";
 
     private void Start()
@@ -65,7 +67,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         GameObject player = PhotonNetwork.Instantiate(this.player.name, spawnPoints[Random.Range(0, spawnPoints.Count - 1)].position, Quaternion.identity);
         player.GetComponent<PlayerSetup>().IsLocalPlayer();
+        _playerInteractUI.SetPlayerInteract(player.GetComponent<PlayerInteract>());
 
-        player.GetComponent<PhotonView>().RPC("SetNickName", RpcTarget.AllBuffered, _nickName);
+        player.GetComponent<PhotonView>().RPC("SetNickName", RpcTarget.AllBuffered, _nickName);       
     }
 }
