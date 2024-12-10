@@ -1427,7 +1427,7 @@ MonoBehaviour:
   roomCam: {fileID: 163515058}
   nameUI: {fileID: 1869333819}
   connectingUI: {fileID: 1166140942}
-  _playerInteractUI: {fileID: 0}
+  _playerInteractUI: {fileID: 87879611}
 --- !u!4 &908652263
 Transform:
   m_ObjectHideFlags: 0
@@ -2077,7 +2077,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1869333820
 RectTransform:
   m_ObjectHideFlags: 0
