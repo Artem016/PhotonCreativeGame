@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour
 {
+    public Action onInteractionAvailable;
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
