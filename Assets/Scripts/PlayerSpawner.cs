@@ -11,6 +11,8 @@ public class PlayerSpawner : MonoBehaviour
     public List<Transform> spawnPoints;
 
     [SerializeField] private PlayerInteractUI _interactUI;
+    [SerializeField] private PlayerDataSO _playerData;
+
     private void Start()
     {
         RoomManager.onJoinedRoom += OnJoinedRoom;
@@ -59,7 +61,7 @@ public class PlayerSpawner : MonoBehaviour
         if (playerSetup != null && photonView != null)
         {
             playerSetup.IsLocalPlayer();
-            //photonView.RPC("SetNickName", RpcTarget.AllBuffered, _nickName);
+            photonView.RPC("SetNickName", RpcTarget.AllBuffered, _playerData.playerName);
         }
         else
         {

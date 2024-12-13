@@ -1,11 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
-using Photon.Realtime;
 
-public class RoomOpener : MonoBehaviour, IInteractable
+public class HubOpener : MonoBehaviour, IInteractable
 {
     [SerializeField] private RoomManager _roomManager;
-    public string roomName;
 
     public string GetInteractText()
     {
@@ -14,7 +13,6 @@ public class RoomOpener : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        _roomManager.SwitchToRoom(roomName);
+        _roomManager.SwitchToHub();
     }
-
 }

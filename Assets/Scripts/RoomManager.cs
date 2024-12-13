@@ -1,73 +1,57 @@
 using Photon.Pun;
-using Photon.Realtime;
 using System;
-using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
+    public static Action onConnectedToMaster;
     public static Action onJoinedRoom;
     public static Action onLeftRoom;
 
-    private string _nextCreateRoomName = "hub";
-
-    private static RoomManager _instance;
-
-    //избавиться от singleton
-    public static RoomManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                Debug.LogError("instance is null");
-            }
-            return _instance;
-        }
-    }
-
-    private void Awake()
-    {
-        PhotonNetwork.AutomaticallySyncScene = false;
-        if (_instance == null)
-        {
-            _instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     public GameObject player;
-    [Space]
-    public List<Transform> spawnPoints;
 
-    [Space]
-    public GameObject roomCam;
+    //public List<Transform> spawnPoints;
 
-    [Space]
+    //public GameObject roomCam;
+
     public GameObject nameUI;
     public GameObject connectingUI;
 
-    [SerializeField] private PlayerInteractUI _playerInteractUI;
+    //[SerializeField] private PlayerInteractUI _playerInteractUI;
 
-    private string _nickName = "unnamed";
+    private string _roomForCreating = "hub";
+    private string _sceneForLoad = "fps_scene";
 
-    public void SwitchToNewRoom(string newRoomName)
+    //private string _nickName = "unnamed";
+
+    public void SwitchToRoom(string roomName)
     {
         if (PhotonNetwork.InRoom)
         {
             Debug.Log("Leaving current room...");
-            _nextCreateRoomName = "room";
+            _roomForCreating = roomName;
+            _sceneForLoad = "room";
             PhotonNetwork.LeaveRoom(); 
         }
     }
 
-    public void ChangeNickName(string nickName)
+    public void SwitchToHub()
     {
-        _nickName = nickName;
+        if (PhotonNetwork.InRoom)
+        {
+            Debug.Log("Leaving current room...");
+            _roomForCreating = "hub";
+            _sceneForLoad = "fps_scene";
+            PhotonNetwork.LeaveRoom();
+        }
     }
+
+    //public void ChangeNickName(string nickName)
+    //{
+    //    _nickName = nickName;
+    //}
 
     public void JoinRoomClick()
     {
@@ -86,16 +70,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         Debug.Log("Connected to Server");
 
-        PhotonNetwork.JoinLobby(); 
-    }
+        onConnectedToMaster?.Invoke();
 
-    public override void OnJoinedLobby()
-    {
-        base.OnJoinedLobby();
+        PhotonNetwork.JoinOrCreateRoom(_roomForCreating, null, null);
 
-        Debug.Log("We are in the lobby");
-
-        PhotonNetwork.JoinOrCreateRoom(_nextCreateRoomName, null, null);
+        if (_sceneForLoad != SceneManager.GetActiveScene().name)
+        {
+            PhotonNetwork.LoadLevel(_sceneForLoad);
+        }
     }
 
     public override void OnJoinedRoom()
@@ -103,11 +85,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
         base.OnJoinedLobby();
 
         Debug.Log("We are connected and in room");
-
-        if(_nextCreateRoomName != "hub")
-        {
-            PhotonNetwork.LoadLevel("room");
-        }
 
         onJoinedRoom?.Invoke();
 
